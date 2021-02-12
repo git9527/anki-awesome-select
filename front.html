@@ -1,0 +1,56 @@
+<script>
+  // v0.5.2 - https://github.com/SimonLammer/anki-persistence/blob/62463a7f63e79ce12f7a622a8ca0beb4c1c5d556/script.js
+  if(void 0===window.Persistence){var _persistenceKey="github.com/SimonLammer/anki-persistence/",_defaultKey="_default";if(window.Persistence_sessionStorage=function(){var e=!1;try{"object"==typeof window.sessionStorage&&(e=!0,this.clear=function(){for(var e=0;e<sessionStorage.length;e++){var t=sessionStorage.key(e);0==t.indexOf(_persistenceKey)&&(sessionStorage.removeItem(t),e--)}},this.setItem=function(e,t){void 0==t&&(t=e,e=_defaultKey),sessionStorage.setItem(_persistenceKey+e,JSON.stringify(t))},this.getItem=function(e){return void 0==e&&(e=_defaultKey),JSON.parse(sessionStorage.getItem(_persistenceKey+e))},this.removeItem=function(e){void 0==e&&(e=_defaultKey),sessionStorage.removeItem(_persistenceKey+e)})}catch(e){}this.isAvailable=function(){return e}},window.Persistence_windowKey=function(e){var t=window[e],i=!1;"object"==typeof t&&(i=!0,this.clear=function(){t[_persistenceKey]={}},this.setItem=function(e,i){void 0==i&&(i=e,e=_defaultKey),t[_persistenceKey][e]=i},this.getItem=function(e){return void 0==e&&(e=_defaultKey),t[_persistenceKey][e]||null},this.removeItem=function(e){void 0==e&&(e=_defaultKey),delete t[_persistenceKey][e]},void 0==t[_persistenceKey]&&this.clear()),this.isAvailable=function(){return i}},window.Persistence=new Persistence_sessionStorage,Persistence.isAvailable()||(window.Persistence=new Persistence_windowKey("py")),!Persistence.isAvailable()){var titleStartIndex=window.location.toString().indexOf("title"),titleContentIndex=window.location.toString().indexOf("main",titleStartIndex);titleStartIndex>0&&titleContentIndex>0&&titleContentIndex-titleStartIndex<10&&(window.Persistence=new Persistence_windowKey("qt"))}}
+</script>
+
+<div class="wrap-container">
+  <div class="body">
+    <div class="question">{{cloze:question}}</div>
+    <ul class="options" id="optionFront"></ul>
+  </div>
+</div>
+
+<div class="footer">版本: v1.0, 作者: git9527</div>
+
+<div id="answer" style="display:none">{{answer}}</div>
+<div id="options" style="display:none">{{options}}</div>
+
+<script>
+  function showFrontOptions() {
+    var optionOl = document.getElementById("optionFront");
+    var options = document.getElementById("options");
+    var optionList = "";
+    options = options.innerHTML
+    options = options.split("||")
+    for (var s in options) {
+      var prefix = String.fromCharCode(Number.parseInt(s) + 65)
+      var _option = prefix + ". " + options[s]
+      var _id = Number.parseInt(s) + 1 == document.getElementById("answer").innerHTML ? 'optionTrue' : prefix
+      optionList += "<li id='" + _id + "' class='option' onclick='checkAnswer(this)'>" + _option + "</li>"
+    }
+    optionOl.innerHTML = optionList
+  }
+
+  function checkAnswer(li) {
+    if (Persistence.isAvailable() && Persistence.getItem()) return
+    li.className += " selected"
+    Persistence.setItem(li.id)
+    setTimeout(function () {
+      flipToBack()
+    }, 100)
+  }
+
+  function flipToBack () {
+    if (typeof pycmd !== "undefined") {
+      pycmd("ans")
+    } else if (typeof study !== "undefined") {
+      study.drawAnswer()
+    } else if (typeof AnkiDroidJS !== "undefined") {
+      showAnswer()
+    } else if (window.anki && window.sendMessage) {
+      window.sendMessage("ankitap", "midCenter")
+    }
+  }
+
+  showFrontOptions()
+</script>
