@@ -98,12 +98,12 @@ with open(base_folder + '争上游题库2021年2月10日1946题库答案-3.txt',
         full_line = line
 
 tags = {}
-with open(base_folder + 'tags.txt', 'r') as file:
+with open(base_folder + 'tags_generated.txt', 'r') as file:
     for line in file:
         tokens = line.strip().split(":")
         tags[tokens[0]] = tokens[1]
 
-with open(base_folder + '强国题库-0218.txt', 'w') as file:
+with open(base_folder + '强国题库-0218-2.txt', 'w') as file:
     next_index = 0
     for i in range(1, 1947):
         question_index = '{:04d}'.format(i)

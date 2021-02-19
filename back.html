@@ -7,9 +7,7 @@
   <div class="body">
     <div class="question">{{id}}. {{cloze:question}}</div>
     <ul class="options" id="optionBack"></ul>
-    <div class="tag">
-      标签: {{Tags}}
-    </div>
+    <div id="tagBack"></div>
   </div>
   <hr>
 
@@ -19,18 +17,17 @@
 
 </div>
 
-<div class="footer">版本: v1.1，作者: git9527，开源地址：<a href="https://github.com/git9527/anki-single-select">Github</a>，<a href="https://gitee.com/git9527/anki-single-select">Gitee</a></div>
+<div class="footer">版本: v1.2，作者: git9527，开源地址：<a href="https://github.com/git9527/anki-single-select">Github</a>，<a href="https://gitee.com/git9527/anki-single-select">Gitee</a></div>
 
 <div id="answer" style="display:none">{{answer}}</div>
 <div id="options" style="display:none">{{options}}</div>
+<div id="tags" style="display:none">{{Tags}}</div>
 
 <script>
   function showBackOptions() {
-    var optionOl = document.getElementById("optionBack")
     var options = document.getElementById("options");
     var optionList = "";
-    options = options.innerHTML
-    options = options.split("||")
+    options = options.innerHTML.split("||")
     for (var s in options) {
       var prefix = String.fromCharCode(Number.parseInt(s) + 65)
       var _option = prefix + ". " + options[s]
@@ -42,10 +39,22 @@
       }
       optionList += "<li class='" + _class + "'>" + _option + "</li>"
     }
-    optionOl.innerHTML = optionList
+    document.getElementById("optionBack").innerHTML = optionList
+  }
+
+  function showTags () {
+    var tags = document.getElementById("tags").innerHTML
+    if (!tags) return
+    tags = tags.split(' ')
+    var tagList = '<span class="tag-title">标签: </span>'
+    for (var tag of tags) {
+      tagList += '<span class="single-tag">' + tag + '</span>'
+    }
+    document.getElementById("tagBack").innerHTML = tagList
   }
 
   showBackOptions()
+  showTags()
 
   document.getElementById("correctAnswer").innerHTML = String.fromCharCode(Number.parseInt(document.getElementById("answer").innerHTML) + 64)
   if (Persistence.isAvailable()) {

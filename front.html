@@ -7,31 +7,28 @@
   <div class="body">
     <div class="question">{{id}}. {{cloze:question}}</div>
     <ul class="options" id="optionFront"></ul>
-    <div class="tag">
-      标签: {{Tags}}
-    </div>
+    <div id="tagFront"></div>
   </div>
 </div>
 
-<div class="footer">版本: v1.1，作者: git9527，开源地址：<a href="https://github.com/git9527/anki-single-select">Github</a>，<a href="https://gitee.com/git9527/anki-single-select">Gitee</a></div>
+<div class="footer">版本: v1.2，作者: git9527，开源地址：<a href="https://github.com/git9527/anki-single-select">Github</a>，<a href="https://gitee.com/git9527/anki-single-select">Gitee</a></div>
 
 <div id="answer" style="display:none">{{answer}}</div>
 <div id="options" style="display:none">{{options}}</div>
+<div id="tags" style="display:none">{{Tags}}</div>
 
 <script>
   function showFrontOptions() {
-    var optionOl = document.getElementById("optionFront");
     var options = document.getElementById("options");
     var optionList = "";
-    options = options.innerHTML
-    options = options.split("||")
+    options = options.innerHTML.split("||")
     for (var s in options) {
       var prefix = String.fromCharCode(Number.parseInt(s) + 65)
       var _option = prefix + ". " + options[s]
       var _id = Number.parseInt(s) + 1 == document.getElementById("answer").innerHTML ? 'optionTrue' : prefix
       optionList += "<li id='" + _id + "' class='option' onclick='checkAnswer(this)'>" + _option + "</li>"
     }
-    optionOl.innerHTML = optionList
+    document.getElementById("optionFront").innerHTML = optionList
   }
 
   function checkAnswer(li) {
@@ -55,5 +52,17 @@
     }
   }
 
+  function showTags () {
+    var tags = document.getElementById("tags").innerHTML
+    if (!tags) return
+    tags = tags.split(' ')
+    var tagList = '<span class="tag-title">标签: </span>'
+    for (var tag of tags) {
+      tagList += '<span class="single-tag">' + tag + '</span>'
+    }
+    document.getElementById("tagFront").innerHTML = tagList
+  }
+
   showFrontOptions()
+  showTags()
 </script>
