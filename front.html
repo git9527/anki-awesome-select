@@ -11,7 +11,7 @@
   </div>
 </div>
 
-<div class="footer">v1.4，作者：git9527，开源地址：<a href="https://github.com/git9527/anki-single-select">Github</a> | <a href="https://gitee.com/git9527/anki-single-select">Gitee</a></div>
+<div class="footer">v1.5，作者：git9527，开源地址：<a href="https://github.com/git9527/anki-single-select">Github</a> | <a href="https://gitee.com/git9527/anki-single-select">Gitee</a></div>
 
 <div id="answer" style="display:none">{{answer}}</div>
 <div id="options" style="display:none">{{options}}</div>
@@ -32,9 +32,11 @@
   }
 
   function checkAnswer(li) {
-    if (Persistence.isAvailable() && Persistence.getItem()) return
+    for (var option of document.getElementsByClassName('option')) { option.className = 'option'}
     li.className += " selected"
-    Persistence.setItem(li.id)
+    if (Persistence.isAvailable()) {
+      Persistence.setItem(li.id)
+    }
     setTimeout(function () {
       flipToBack()
     }, 100)
@@ -58,7 +60,9 @@
     tags = tags.split(' ')
     var tagList = '<span class="tag-title">标签: </span>'
     for (var tag of tags) {
-      tagList += '<span class="single-tag">' + tag + '</span>'
+      if (tag) {
+        tagList += '<span class="single-tag">' + tag + '</span>'
+      }
     }
     document.getElementById("tagFront").innerHTML = tagList
   }
