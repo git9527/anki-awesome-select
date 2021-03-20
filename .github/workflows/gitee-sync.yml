@@ -8,5 +8,5 @@ jobs:
         env:
           SSH_PRIVATE_KEY: ${{ secrets.GITEE_PRIVATE_KEY }}
         with:
-          source-repo: "git@github.com:git9527/anki-single-select.git"
-          destination-repo: "git@gitee.com:git9527/anki-single-select.git"
+          source-repo: "git@github.com:git9527/anki-awesome-select.git"
+          destination-repo: "git@gitee.com:git9527/anki-awesome-select.git"

@@ -5,13 +5,13 @@
 
 <div class="wrap-container">
   <div class="body">
-    <div class="question">{{id}}. {{cloze:question}}</div>
+    <div class="question">{{id}}.<span id="questionType" class="question-type"></span>{{cloze:question}}</div>
     <div class="options" id="optionFront"></div>
     <div id="tagFront"></div>
   </div>
 </div>
 
-<div class="footer">v1.5，作者：git9527，开源地址：<a href="https://github.com/git9527/anki-single-select">Github</a> | <a href="https://gitee.com/git9527/anki-single-select">Gitee</a></div>
+<div class="footer">v2.0，作者：git9527，开源地址：<a href="https://github.com/git9527/anki-awesome-select">Github</a> | <a href="https://gitee.com/git9527/anki-awesome-select">Gitee</a></div>
 
 <div id="answer" style="display:none">{{answer}}</div>
 <div id="options" style="display:none">{{options}}</div>
@@ -19,27 +19,58 @@
 
 <script>
   function showFrontOptions() {
-    var options = document.getElementById("options");
-    var optionList = "";
-    options = options.innerHTML.split("||")
-    for (var s in options) {
-      var prefix = String.fromCharCode(Number.parseInt(s) + 65)
-      var _option = prefix + ". " + options[s]
-      var _id = Number.parseInt(s) + 1 == document.getElementById("answer").innerHTML ? 'optionTrue' : prefix
-      optionList += "<li id='" + _id + "' class='option' onclick='checkAnswer(this)'>" + _option + "</li>"
+    var optionObjs = getOptionObjs()
+    var liList = ''
+    for (var i in optionObjs) {
+      var _optionObj = optionObjs[i]
+      var prefix = String.fromCharCode(Number.parseInt(i) + 65)
+      var _option = prefix + ". " + _optionObj.label
+      liList += "<li id='" + _optionObj.key + "' class='option' onclick='markSelected(this)'>" + _option + "</li>"
     }
-    document.getElementById("optionFront").innerHTML = optionList
+    document.getElementById("optionFront").innerHTML = liList
   }
 
-  function checkAnswer(li) {
-    for (var option of document.getElementsByClassName('option')) { option.className = 'option'}
-    li.className += " selected"
-    if (Persistence.isAvailable()) {
-      Persistence.setItem(li.id)
+  function getOptionObjs() {
+    var optionArray = document.getElementById("options").innerHTML.trim().split("||")
+    var optionObjs = []
+    for (var i in optionArray) {
+      optionObjs.push({
+        key: Number.parseInt(i) + 1,
+        label: optionArray[i]
+      })
     }
-    setTimeout(function () {
-      flipToBack()
-    }, 100)
+    return optionObjs
+  }
+
+  function markSelected(li) {
+    // 对应多选
+    if (document.getElementById("answer").innerHTML.indexOf('||') > 0) {
+      if (Persistence.isAvailable()) {
+        var selectedArray = Persistence.getItem('ANKI-SELECTED') ? Persistence.getItem('ANKI-SELECTED').split(',') : []
+        if (li.className.indexOf("selected") > 0) {
+          selectedArray.splice(selectedArray.indexOf(li.id), 1)
+        } else {
+          selectedArray.push(li.id)
+        }
+        selectedArray.sort()
+        Persistence.setItem('ANKI-SELECTED', selectedArray.toString())
+      }
+      if (li.className.indexOf("selected") > 0) {
+        li.className = "option"
+      } else {
+        li.className = "option selected"
+      }
+    } else {
+      // 单选
+      for (var option of document.getElementsByClassName('option')) { option.className = 'option'}
+      li.className = "option selected"
+      if (Persistence.isAvailable()) {
+        Persistence.setItem('ANKI-SELECTED', li.id)
+      }
+      setTimeout(function () {
+        flipToBack()
+      }, 100)
+    }
   }
 
   function flipToBack () {
@@ -69,4 +100,5 @@
 
   showFrontOptions()
   showTags()
+  document.getElementById('questionType').innerHTML = document.getElementById("answer").innerHTML.indexOf('||') > -1 ? '【多选】' : '【单选】'
 </script>
