@@ -25,13 +25,19 @@
       <div class="single-setting">
         <div class="setting-label">隐藏选项</div>
         <div class="setting-switch">
-          <input class="mui-switch mui-switch-anim" type="checkbox">
+          <input id="hide-option" class="mui-switch mui-switch-anim" type="checkbox" onchange="switchHideOption(this)">
+        </div>
+      </div>
+      <div class="single-setting">
+        <div class="setting-label">随机选项</div>
+        <div class="setting-switch">
+          <input id="random-option" class="mui-switch mui-switch-anim" type="checkbox" onchange="switchRandomOption(this)">
         </div>
       </div>
       <div class="single-setting">
         <div class="setting-label">显示类型</div>
         <div class="setting-switch">
-          <input class="mui-switch mui-switch-anim" type="checkbox">
+          <input id="show-type" class="mui-switch mui-switch-anim" type="checkbox" onchange="switchShowType(this)">
         </div>
       </div>
     </div>
@@ -40,19 +46,33 @@
 </div>
 
 <script>
-  function showFrontOptions() {
-    var optionObjs = getOptionObjs()
+
+  var showQuestionType = '0'
+  var hideOptions = '0'
+  var randomOptions = '0'
+
+  function showFrontOptions(hideOption, randomOption) {
+    var keySeq = []
+    var optionObjs = getOptionObjs(randomOption)
     var liList = ''
     for (var i in optionObjs) {
       var _optionObj = optionObjs[i]
       var prefix = String.fromCharCode(Number.parseInt(i) + 65)
-      var _option = prefix + ". " + _optionObj.label
+      var _option = prefix + '. ' + _optionObj.label
+      if (hideOption === '1') {
+        var endIndex = _optionObj.label.indexOf("《") > -1 ? 2 : 1
+        _option = prefix + '. ' + _optionObj.label.substring(0, endIndex)
+      }
       liList += "<li id='" + _optionObj.key + "' class='option' onclick='markSelected(this)'>" + _option + "</li>"
+      keySeq.push(_optionObj.key)
+    }
+    if (Persistence.isAvailable()) {
+      Persistence.setItem('ANKI-OPTIONS-ORDER', keySeq.toString())
     }
     document.getElementById("optionFront").innerHTML = liList
   }
 
-  function getOptionObjs() {
+  function getOptionObjs(randomOption) {
     var optionArray = document.getElementById("options").innerHTML.trim().split("||")
     var optionObjs = []
     for (var i in optionArray) {
@@ -60,6 +80,14 @@
         key: Number.parseInt(i) + 1,
         label: optionArray[i]
       })
+    }
+    if (randomOption === '1') {
+      for (let i = 1; i < optionObjs.length; i++) {
+        const random = Math.floor(Math.random() * (i + 1))
+        const temp = optionObjs[i]
+        optionObjs[i] = optionObjs[random]
+        optionObjs[random] = temp
+      }
     }
     return optionObjs
   }
@@ -140,8 +168,52 @@
     }
   }
 
-  showFrontOptions()
+  function applySettings() {
+    if (Persistence.isAvailable()) {
+      showQuestionType = Persistence.getItem('ANKI-SETTINGS-SHOW-QUESTION-TYPE') || '0'
+      hideOptions = Persistence.getItem('ANKI-SETTINGS-HIDE-OPTIONS') || '0'
+      randomOptions = Persistence.getItem('ANKI-SETTINGS-RANDOM-OPTIONS') || '0'
+    }
+    document.getElementById('hide-option').checked = hideOptions === '1'
+    document.getElementById('random-option').checked = randomOptions === '1'
+    document.getElementById('show-type').checked = showQuestionType === '1'
+    showFrontOptions(hideOptions, randomOptions)
+    dealQuestionType(showQuestionType)
+  }
+
+  function switchHideOption(input) {
+    var key = input.checked ? '1' : '0'
+    if (Persistence.isAvailable()) {
+      Persistence.setItem('ANKI-SETTINGS-HIDE-OPTIONS', key)
+    }
+    showFrontOptions(key, randomOptions)
+  }
+
+  function switchRandomOption(input) {
+    var key = input.checked ? '1' : '0'
+    if (Persistence.isAvailable()) {
+      Persistence.setItem('ANKI-SETTINGS-RANDOM-OPTIONS', key)
+    }
+    showFrontOptions(hideOptions, key)
+  }
+
+  function switchShowType(input) {
+    var key = input.checked ? '1' : '0'
+    if (Persistence.isAvailable()) {
+      Persistence.setItem('ANKI-SETTINGS-SHOW-QUESTION-TYPE', key)
+    }
+    dealQuestionType(key)
+  }
+
+  function dealQuestionType(showQuestionType) {
+    if (showQuestionType === '1') {
+      document.getElementById('questionType').innerHTML = document.getElementById("answer").innerHTML.indexOf('||') > -1 ? '【多选】' : '【单选】'
+    } else {
+      document.getElementById('questionType').innerHTML = ' '
+    }
+  }
+
+  applySettings()
   showTags()
   renameIosSendMessage()
-  document.getElementById('questionType').innerHTML = document.getElementById("answer").innerHTML.indexOf('||') > -1 ? '【多选】' : '【单选】'
 </script>

@@ -81,6 +81,12 @@
         label: optionArray[i]
       })
     }
+    if (Persistence.isAvailable()) {
+      var optionsOrder = Persistence.getItem('ANKI-OPTIONS-ORDER').trim().split(',')
+      optionObjs = optionObjs.sort(function(a, b) {
+        return optionsOrder.indexOf(a.key + '') - optionsOrder.indexOf(b.key + '')
+      })
+    }
     return optionObjs
   }
 
@@ -98,11 +104,20 @@
   }
 
   function numberToAlpha(numbers) {
+    var optionsOrder = []
+    if (Persistence.isAvailable()) {
+      optionsOrder = Persistence.getItem('ANKI-OPTIONS-ORDER').trim().split(',')
+    }
     var alphas = []
     for (var i in numbers) {
       var number = numbers[i]
-      alphas.push(String.fromCharCode(Number.parseInt(number) + 64))
+      if (optionsOrder.length === 0) {
+        alphas.push(String.fromCharCode(Number.parseInt(number) + 64))
+      } else {
+        alphas.push(String.fromCharCode(optionsOrder.indexOf(number) + 65))
+      }
     }
+    alphas.sort()
     return alphas.toString()
   }
 
