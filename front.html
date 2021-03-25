@@ -11,11 +11,33 @@
   </div>
 </div>
 
-<div class="footer">v2.0，作者：git9527，开源地址：<a href="https://github.com/git9527/anki-awesome-select">Github</a> | <a href="https://gitee.com/git9527/anki-awesome-select">Gitee</a></div>
+<div class="footer">v3.0，作者：git9527，<a href="javascript:showSettings();">卡片设置</a>，开源地址：<a href="https://github.com/git9527/anki-awesome-select">Github</a> | <a href="https://gitee.com/git9527/anki-awesome-select">Gitee</a></div>
 
 <div id="answer" style="display:none">{{answer}}</div>
 <div id="options" style="display:none">{{options}}</div>
 <div id="tags" style="display:none">{{Tags}}</div>
+
+<div id="settingsModal" class="modal">
+
+  <div class="modal-content">
+    <span class="close" onclick="hideSettings()">&times;</span>
+    <div class="settings-block">
+      <div class="single-setting">
+        <div class="setting-label">隐藏选项</div>
+        <div class="setting-switch">
+          <input class="mui-switch mui-switch-anim" type="checkbox">
+        </div>
+      </div>
+      <div class="single-setting">
+        <div class="setting-label">显示类型</div>
+        <div class="setting-switch">
+          <input class="mui-switch mui-switch-anim" type="checkbox">
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
 
 <script>
   function showFrontOptions() {
@@ -54,6 +76,11 @@
         }
         selectedArray.sort()
         Persistence.setItem('ANKI-SELECTED', selectedArray.toString())
+        if (selectedArray.length === document.getElementById("answer").innerHTML.trim().split('||').length) {
+          setTimeout(function () {
+            flipToBack()
+          }, 100)
+        }
       }
       if (li.className.indexOf("selected") > 0) {
         li.className = "option"
@@ -80,8 +107,8 @@
       study.drawAnswer()
     } else if (typeof AnkiDroidJS !== "undefined") {
       showAnswer()
-    } else if (window.anki && window.sendMessage) {
-      window.sendMessage("ankitap", "midCenter")
+    } else if (window.anki && window.sendMessage2) {
+      window.sendMessage2("ankitap", "midCenter")
     }
   }
 
@@ -98,7 +125,23 @@
     document.getElementById("tagFront").innerHTML = tagList
   }
 
+  function showSettings() {
+    document.getElementById("settingsModal").style.display = 'block'
+  }
+
+  function hideSettings() {
+    document.getElementById("settingsModal").style.display = 'none'
+  }
+
+  function renameIosSendMessage(){
+    if (window['sendMessage']) {
+      window['sendMessage2'] = window['sendMessage']
+      window['sendMessage'] = null
+    }
+  }
+
   showFrontOptions()
   showTags()
+  renameIosSendMessage()
   document.getElementById('questionType').innerHTML = document.getElementById("answer").innerHTML.indexOf('||') > -1 ? '【多选】' : '【单选】'
 </script>

@@ -12,16 +12,16 @@
   <hr>
 
   <div class="tips">
-    正确选项：<span id="correctAnswer"></span>，你的选项：<span id="yourChoice"></span>
+    正确选项：<span id="correctAnswer"></span>&nbsp;&nbsp;&nbsp;&nbsp;你的选项：<span id="yourChoice"></span>
   </div>
-  <div id="notes-warper">
+  <div id="notes-wrapper">
     <hr>
     <div class="notes-container">{{notes}}</div>
   </div>
 
 </div>
 
-<div class="footer">v2.0，作者：git9527，开源地址：<a href="https://github.com/git9527/anki-awesome-select">Github</a> | <a href="https://gitee.com/git9527/anki-awesome-select">Gitee</a></div>
+<div class="footer">v3.0，作者：git9527，开源地址：<a href="https://github.com/git9527/anki-awesome-select">Github</a> | <a href="https://gitee.com/git9527/anki-awesome-select">Gitee</a></div>
 
 <div id="answer" style="display:none">{{answer}}</div>
 <div id="options" style="display:none">{{options}}</div>
@@ -117,8 +117,8 @@
   }
 
   function showNotes() {
-    if (!document.getElementById('notes').innerText) {
-      document.getElementById('notes-warper').style.display = 'none'
+    if (document.getElementById('notes').innerText) {
+      document.getElementById('notes-wrapper').style.display = 'block'
     }
   }
 

@@ -1,0 +1,248 @@
+
+.wrap-container {
+    margin: 10px;
+}
+
+.body {
+    background-color: white;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.question {
+    color: black;
+    font-weight: bold;
+}
+
+.options {
+    list-style: none;
+}
+
+.options * {
+    cursor: pointer;
+}
+
+.option {
+    color: black;
+    background-color: #f2f2f4;
+    padding: 7px 10px;
+    margin: 10px;
+    line-height: 26px;
+    border-radius: 5px;
+    font-weight: normal;
+}
+
+.options input[name="options"] {
+    display: none;
+}
+
+.correct {
+    background-color: #5ec582;
+    color: white
+}
+
+.wrong {
+    background-color: #e25b76;
+    color: white
+}
+
+.question-type {
+    color: #ef3461;
+}
+
+.selected {
+    background-color: #ffc245;
+    color: white
+}
+
+.card {
+    font-family: Arial, serif;
+    font-size: 17px;
+    text-align: left;
+    color: white;
+    background-color: #272822;
+}
+
+.tips {
+    color: white;
+}
+
+.footer {
+    font-size: 14px;
+    margin: 30px 10px;
+    color: white;
+    font-weight: normal;
+}
+
+.tag-title {
+    color: black;
+    margin-left: 10px;
+    font-weight: bold;
+}
+
+.single-tag {
+    font-size: 14px;
+    margin-left: 5px;
+    padding: 4px 8px;
+    border-radius: 5px;
+    color: #f56c6c;
+    background: #fef0f0;
+    border: 1px solid #fbc4c4;
+    font-weight: normal;
+}
+
+a {
+    color: #0366d6;
+    text-decoration: none;
+}
+
+#notes-wrapper {
+    display: none;
+}
+
+.notes-container {
+    background-color: white;
+    color: black;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0); /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 10px;
+    border: 1px solid #888;
+    width: 250px;
+    border-radius: 5px;
+    color: black;
+}
+
+/* The Close Button */
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    display: block;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.mui-switch {
+    vertical-align: middle;
+    width: 52px;
+    height: 31px;
+    position: relative;
+    border: 1px solid #dfdfdf;
+    background-color: #fdfdfd;
+    box-shadow: #dfdfdf 0 0 0 0 inset;
+    border-radius: 20px;
+    background-clip: content-box;
+    display: inline-block;
+    -webkit-appearance: none;
+    user-select: none;
+    outline: none;
+}
+
+.mui-switch:before {
+    content: '';
+    width: 29px;
+    height: 29px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 20px;
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.mui-switch:checked {
+    border-color: #64bd63;
+    box-shadow: #64bd63 0 0 0 16px inset;
+    background-color: #64bd63;
+}
+
+.mui-switch:checked:before {
+    left: 21px;
+}
+
+.mui-switch.mui-switch-animbg {
+    transition: background-color ease 0.4s;
+}
+
+.mui-switch.mui-switch-animbg:before {
+    transition: left 0.3s;
+}
+
+.mui-switch.mui-switch-animbg:checked {
+    box-shadow: #dfdfdf 0 0 0 0 inset;
+    background-color: #64bd63;
+    transition: border-color 0.4s, background-color ease 0.4s;
+}
+
+.mui-switch.mui-switch-animbg:checked:before {
+    transition: left 0.3s;
+}
+
+.mui-switch.mui-switch-anim {
+    transition: border cubic-bezier(0, 0, 0, 1) 0.4s, box-shadow cubic-bezier(0, 0, 0, 1) 0.4s;
+}
+
+.mui-switch.mui-switch-anim:before {
+    transition: left 0.3s;
+}
+
+.mui-switch.mui-switch-anim:checked {
+    box-shadow: #64bd63 0 0 0 16px inset;
+    background-color: #64bd63;
+    transition: border ease 0.4s, box-shadow ease 0.4s, background-color ease 1.2s;
+}
+
+.mui-switch.mui-switch-anim:checked:before {
+    transition: left 0.3s;
+}
+
+.settings-block {
+    padding: 10px;
+}
+
+.single-setting {
+    border-bottom: 1px solid #ccc;
+    width: 90%;
+    height: 40px;
+    margin-top: 10px;
+}
+
+.setting-switch {
+    margin-left: 140px;
+}
+
+.setting-label {
+    vertical-align: middle;
+    float: left;
+    width: 90px;
+    height: 40px;
+    line-height: 40px;
+}
+
+
