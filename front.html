@@ -11,7 +11,7 @@
   </div>
 </div>
 
-<div class="footer">v3.0，作者：git9527，<a href="javascript:showSettings();">卡片设置</a>，开源地址：<a href="https://github.com/git9527/anki-awesome-select">Github</a> | <a href="https://gitee.com/git9527/anki-awesome-select">Gitee</a></div>
+<div class="footer">v3.1，作者：git9527，<a href="javascript:showSettings();">卡片设置</a>，开源地址：<a href="https://github.com/git9527/anki-awesome-select">Github</a> | <a href="https://gitee.com/git9527/anki-awesome-select">Gitee</a></div>
 
 <div id="answer" style="display:none">{{answer}}</div>
 <div id="options" style="display:none">{{options}}</div>
@@ -40,6 +40,12 @@
           <input id="show-type" class="mui-switch mui-switch-anim" type="checkbox" onchange="switchShowType(this)">
         </div>
       </div>
+      <div class="single-setting">
+        <div class="setting-label">延迟选项</div>
+        <div class="setting-switch">
+          <input id="delay-option" class="mui-switch mui-switch-anim" type="checkbox" onchange="switchDelayOption(this)">
+        </div>
+      </div>
     </div>
   </div>
 
@@ -50,10 +56,12 @@
   var showQuestionType = '0'
   var hideOptions = '0'
   var randomOptions = '0'
+  var delayOptions = '0'
 
-  function showFrontOptions(hideOption, randomOption) {
+  function showFrontOptions(hideOption, randomOption, delayOption) {
     var keySeq = []
     var optionObjs = getOptionObjs(randomOption)
+    initEmptyOptionList(optionObjs)
     var liList = ''
     for (var i in optionObjs) {
       var _optionObj = optionObjs[i]
@@ -68,6 +76,21 @@
     }
     if (Persistence.isAvailable()) {
       Persistence.setItem('ANKI-OPTIONS-ORDER', keySeq.toString())
+    }
+    if (delayOption === '1') {
+      setTimeout(function () {
+        document.getElementById("optionFront").innerHTML = liList
+      }, 500)
+    } else {
+      document.getElementById("optionFront").innerHTML = liList
+    }
+  }
+
+  function initEmptyOptionList(optionObjs) {
+    var liList = ''
+    for (var i in optionObjs) {
+      var prefix = String.fromCharCode(Number.parseInt(i) + 65)
+      liList += "<li class='option'>" + prefix + ".</li>"
     }
     document.getElementById("optionFront").innerHTML = liList
   }
@@ -173,11 +196,14 @@
       showQuestionType = Persistence.getItem('ANKI-SETTINGS-SHOW-QUESTION-TYPE') || '0'
       hideOptions = Persistence.getItem('ANKI-SETTINGS-HIDE-OPTIONS') || '0'
       randomOptions = Persistence.getItem('ANKI-SETTINGS-RANDOM-OPTIONS') || '0'
+      delayOptions = Persistence.getItem('ANKI-SETTINGS-DELAY-OPTIONS') || '0'
+      Persistence.setItem('ANKI-SELECTED', '')
     }
     document.getElementById('hide-option').checked = hideOptions === '1'
     document.getElementById('random-option').checked = randomOptions === '1'
     document.getElementById('show-type').checked = showQuestionType === '1'
-    showFrontOptions(hideOptions, randomOptions)
+    document.getElementById('delay-option').checked = delayOptions === '1'
+    showFrontOptions(hideOptions, randomOptions, delayOptions)
     dealQuestionType(showQuestionType)
   }
 
@@ -186,7 +212,15 @@
     if (Persistence.isAvailable()) {
       Persistence.setItem('ANKI-SETTINGS-HIDE-OPTIONS', key)
     }
-    showFrontOptions(key, randomOptions)
+    showFrontOptions(key, randomOptions, delayOptions)
+  }
+
+  function switchDelayOption(input) {
+    var key = input.checked ? '1' : '0'
+    if (Persistence.isAvailable()) {
+      Persistence.setItem('ANKI-SETTINGS-DELAY-OPTIONS', key)
+    }
+    showFrontOptions(hideOptions, randomOptions, key)
   }
 
   function switchRandomOption(input) {
@@ -194,7 +228,7 @@
     if (Persistence.isAvailable()) {
       Persistence.setItem('ANKI-SETTINGS-RANDOM-OPTIONS', key)
     }
-    showFrontOptions(hideOptions, key)
+    showFrontOptions(hideOptions, key, delayOptions)
   }
 
   function switchShowType(input) {
@@ -216,4 +250,5 @@
   applySettings()
   showTags()
   renameIosSendMessage()
+
 </script>
