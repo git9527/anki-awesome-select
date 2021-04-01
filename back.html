@@ -21,7 +21,7 @@
 
 </div>
 
-<div class="footer">v3.1，作者：git9527，开源地址：<a href="https://github.com/git9527/anki-awesome-select">Github</a> | <a href="https://gitee.com/git9527/anki-awesome-select">Gitee</a></div>
+<div class="footer">v3.2，作者：git9527，开源地址：<a href="https://github.com/git9527/anki-awesome-select">Github</a> | <a href="https://gitee.com/git9527/anki-awesome-select">Gitee</a></div>
 
 <div id="answer" style="display:none">{{answer}}</div>
 <div id="options" style="display:none">{{options}}</div>
@@ -30,6 +30,10 @@
 
 <script>
   function showBackOptions() {
+    var _isLightOption = isLightOption()
+    var correctClass = _isLightOption ? 'correct-light' : 'correct'
+    var wrongClass = _isLightOption ? 'wrong-light' : 'wrong'
+    var shouldSelectClass = _isLightOption ? 'should-select-light' : 'should-select'
     var optionObjs = getOptionObjs()
     var liList = ''
     var isMulti = document.getElementById("answer").innerHTML.indexOf('||') > 0
@@ -43,17 +47,19 @@
       var _class = ''
       if (isMulti) {
         if (_isSelected && _isCorrect) {
-          _class = 'option correct'
-        } else if (!_isSelected && !_isCorrect) {
-          _class = 'option'
+          _class = 'option ' + correctClass
+        } else if (!_isSelected && _isCorrect) {
+          _class = 'option ' + shouldSelectClass
+        } else if (_isSelected && !_isCorrect) {
+          _class = 'option ' + wrongClass
         } else {
-          _class = 'option wrong'
+          _class = 'option'
         }
       } else {
         if (_isCorrect) {
-          _class = 'option correct'
+          _class = 'option ' + correctClass
         } else {
-          _class = _isSelected ? 'option wrong' : 'option'
+          _class = _isSelected ? 'option ' + wrongClass : 'option'
         }
       }
       liList += "<li class='" + _class + "'>" + _option + "</li>"
@@ -88,6 +94,14 @@
       })
     }
     return optionObjs
+  }
+
+  function isLightOption() {
+    if (Persistence.isAvailable()) {
+      return Persistence.getItem('ANKI-SETTINGS-LIGHT-OPTIONS') === '1'
+    } else {
+      return false
+    }
   }
 
   function showTags () {

@@ -23,7 +23,7 @@
 }
 
 .option {
-    color: black;
+    color: #222222;
     background-color: #f2f2f4;
     padding: 7px 10px;
     margin: 10px;
@@ -36,23 +36,52 @@
     display: none;
 }
 
+.correct-light {
+    background-color: #edf8f0;
+    color: #64bd7b;
+    border: 1px solid #64bd7b;
+}
+
 .correct {
-    background-color: #5ec582;
-    color: white
+    background-color: #64bd7b;
+    color: white;
+}
+
+.wrong-light {
+    background-color: #fbebeb;
+    color: #df4a48;
+    border: 1px solid #df4a48;
 }
 
 .wrong {
-    background-color: #e25b76;
-    color: white
+    background-color: #df4a48;
+    color: white;
+}
+
+.should-select-light {
+    background-color: #f8eedb;
+    color: #ffc245;
+    border: 1px solid #ffc245;
+}
+
+.should-select {
+    background-color: #ffc245;
+    color: white;
+}
+
+.selected-light {
+    background-color: #f7f5f2;
+    color: #b59f86;
+    border: 1px solid #b59f86;
+}
+
+.selected {
+    background-color: #b59f86;
+    color: white;
 }
 
 .question-type {
     color: #ef3461;
-}
-
-.selected {
-    background-color: #ffc245;
-    color: white
 }
 
 .card {
@@ -102,6 +131,9 @@ a {
 
 .notes-container {
     background-color: white;
+    font-size: 11px;
+    max-height: 50px;
+    overflow-y: scroll;
     color: black;
     border-radius: 5px;
     padding: 10px;
@@ -243,5 +275,3 @@ a {
     height: 40px;
     line-height: 40px;
 }
-
-

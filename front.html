@@ -11,7 +11,7 @@
   </div>
 </div>
 
-<div class="footer">v3.1，作者：git9527，<a href="javascript:showSettings();">卡片设置</a>，开源地址：<a href="https://github.com/git9527/anki-awesome-select">Github</a> | <a href="https://gitee.com/git9527/anki-awesome-select">Gitee</a></div>
+<div class="footer">v3.2，作者：git9527，<a href="javascript:showSettings();">卡片设置</a>，开源地址：<a href="https://github.com/git9527/anki-awesome-select">Github</a> | <a href="https://gitee.com/git9527/anki-awesome-select">Gitee</a></div>
 
 <div id="answer" style="display:none">{{answer}}</div>
 <div id="options" style="display:none">{{options}}</div>
@@ -22,6 +22,12 @@
   <div class="modal-content">
     <span class="close" onclick="hideSettings()">&times;</span>
     <div class="settings-block">
+      <div class="single-setting">
+        <div class="setting-label">显示类型</div>
+        <div class="setting-switch">
+          <input id="show-type" class="mui-switch mui-switch-anim" type="checkbox" onchange="switchShowType(this)">
+        </div>
+      </div>
       <div class="single-setting">
         <div class="setting-label">隐藏选项</div>
         <div class="setting-switch">
@@ -35,15 +41,15 @@
         </div>
       </div>
       <div class="single-setting">
-        <div class="setting-label">显示类型</div>
-        <div class="setting-switch">
-          <input id="show-type" class="mui-switch mui-switch-anim" type="checkbox" onchange="switchShowType(this)">
-        </div>
-      </div>
-      <div class="single-setting">
         <div class="setting-label">延迟选项</div>
         <div class="setting-switch">
           <input id="delay-option" class="mui-switch mui-switch-anim" type="checkbox" onchange="switchDelayOption(this)">
+        </div>
+      </div>
+      <div class="single-setting">
+        <div class="setting-label">淡色模式</div>
+        <div class="setting-switch">
+          <input id="light-option" class="mui-switch mui-switch-anim" type="checkbox" onchange="switchLightOption(this)">
         </div>
       </div>
     </div>
@@ -57,6 +63,7 @@
   var hideOptions = '0'
   var randomOptions = '0'
   var delayOptions = '0'
+  var lightOptions = '0'
 
   function showFrontOptions(hideOption, randomOption, delayOption) {
     var keySeq = []
@@ -115,12 +122,17 @@
     return optionObjs
   }
 
+  function getSelectedKey() {
+    return lightOptions === '1' ? "selected-light" : 'selected'
+  }
+
   function markSelected(li) {
+    var selectedKey = getSelectedKey()
     // 对应多选
     if (document.getElementById("answer").innerHTML.indexOf('||') > 0) {
       if (Persistence.isAvailable()) {
         var selectedArray = Persistence.getItem('ANKI-SELECTED') ? Persistence.getItem('ANKI-SELECTED').split(',') : []
-        if (li.className.indexOf("selected") > 0) {
+        if (li.className.indexOf(selectedKey) > 0) {
           selectedArray.splice(selectedArray.indexOf(li.id), 1)
         } else {
           selectedArray.push(li.id)
@@ -133,15 +145,15 @@
           }, 100)
         }
       }
-      if (li.className.indexOf("selected") > 0) {
+      if (li.className.indexOf(selectedKey) > 0) {
         li.className = "option"
       } else {
-        li.className = "option selected"
+        li.className = "option " + selectedKey
       }
     } else {
       // 单选
       for (var option of document.getElementsByClassName('option')) { option.className = 'option'}
-      li.className = "option selected"
+      li.className = "option " + selectedKey
       if (Persistence.isAvailable()) {
         Persistence.setItem('ANKI-SELECTED', li.id)
       }
@@ -197,46 +209,70 @@
       hideOptions = Persistence.getItem('ANKI-SETTINGS-HIDE-OPTIONS') || '0'
       randomOptions = Persistence.getItem('ANKI-SETTINGS-RANDOM-OPTIONS') || '0'
       delayOptions = Persistence.getItem('ANKI-SETTINGS-DELAY-OPTIONS') || '0'
+      lightOptions = Persistence.getItem('ANKI-SETTINGS-LIGHT-OPTIONS') || '0'
       Persistence.setItem('ANKI-SELECTED', '')
     }
     document.getElementById('hide-option').checked = hideOptions === '1'
     document.getElementById('random-option').checked = randomOptions === '1'
     document.getElementById('show-type').checked = showQuestionType === '1'
     document.getElementById('delay-option').checked = delayOptions === '1'
+    document.getElementById('light-option').checked = lightOptions === '1'
     showFrontOptions(hideOptions, randomOptions, delayOptions)
     dealQuestionType(showQuestionType)
   }
 
   function switchHideOption(input) {
-    var key = input.checked ? '1' : '0'
-    if (Persistence.isAvailable()) {
-      Persistence.setItem('ANKI-SETTINGS-HIDE-OPTIONS', key)
-    }
-    showFrontOptions(key, randomOptions, delayOptions)
+    rerenderOptions(input, 'ANKI-SETTINGS-HIDE-OPTIONS')
   }
 
   function switchDelayOption(input) {
-    var key = input.checked ? '1' : '0'
-    if (Persistence.isAvailable()) {
-      Persistence.setItem('ANKI-SETTINGS-DELAY-OPTIONS', key)
-    }
-    showFrontOptions(hideOptions, randomOptions, key)
+    rerenderOptions(input, 'ANKI-SETTINGS-DELAY-OPTIONS')
   }
 
   function switchRandomOption(input) {
-    var key = input.checked ? '1' : '0'
-    if (Persistence.isAvailable()) {
-      Persistence.setItem('ANKI-SETTINGS-RANDOM-OPTIONS', key)
+    rerenderOptions(input, 'ANKI-SETTINGS-RANDOM-OPTIONS')
+  }
+
+  function switchLightOption(input) {
+    extractKeyFromInputAndSave(input, 'ANKI-SETTINGS-LIGHT-OPTIONS')
+    var selectedKey = getSelectedKey()
+    for (var option of document.getElementsByClassName('option')) {
+      if (option.className.indexOf(' ') > -1) {
+        option.className = "option " + selectedKey
+      }
     }
-    showFrontOptions(hideOptions, key, delayOptions)
   }
 
   function switchShowType(input) {
+    extractKeyFromInputAndSave(input, 'ANKI-SETTINGS-SHOW-QUESTION-TYPE')
+    dealQuestionType(showQuestionType)
+  }
+
+  function extractKeyFromInputAndSave(input, persistKey) {
     var key = input.checked ? '1' : '0'
     if (Persistence.isAvailable()) {
-      Persistence.setItem('ANKI-SETTINGS-SHOW-QUESTION-TYPE', key)
+      Persistence.setItem(persistKey, key)
+      if (persistKey === 'ANKI-SETTINGS-RANDOM-OPTIONS' || persistKey === 'ANKI-SETTINGS-DELAY-OPTIONS' || persistKey === 'ANKI-SETTINGS-HIDE-OPTIONS') {
+        Persistence.setItem('ANKI-SELECTED', '')
+      }
     }
-    dealQuestionType(key)
+    if (persistKey === 'ANKI-SETTINGS-HIDE-OPTIONS') {
+      hideOptions = key
+    } else if (persistKey === 'ANKI-SETTINGS-DELAY-OPTIONS') {
+      delayOptions = key
+    } else if (persistKey === 'ANKI-SETTINGS-RANDOM-OPTIONS') {
+      randomOptions = key
+    } else if (persistKey === 'ANKI-SETTINGS-LIGHT-OPTIONS') {
+      lightOptions = key
+    } else if (persistKey === 'ANKI-SETTINGS-SHOW-QUESTION-TYPE') {
+      showQuestionType = key
+    }
+    return key
+  }
+
+  function rerenderOptions(input, persistKey) {
+    extractKeyFromInputAndSave(input, persistKey)
+    showFrontOptions(hideOptions, randomOptions, delayOptions, lightOptions)
   }
 
   function dealQuestionType(showQuestionType) {
