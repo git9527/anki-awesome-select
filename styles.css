@@ -43,7 +43,7 @@
 }
 
 .correct {
-    background-color: #4ba630;
+    background-color: #4ba730;
     color: white;
 }
 
@@ -54,7 +54,7 @@
 }
 
 .wrong {
-    background-color: #e25351;
+    background-color: #e25352;
     color: white;
 }
 
