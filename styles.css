@@ -131,12 +131,13 @@ a {
 
 .notes-container {
     background-color: white;
-    font-size: 11px;
+    font-size: 13px;
     max-height: 50px;
     overflow-y: scroll;
     color: black;
     border-radius: 5px;
     padding: 10px;
+    font-weight: normal;
 }
 
 .modal {

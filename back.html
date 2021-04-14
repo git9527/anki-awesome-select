@@ -125,10 +125,12 @@
     var alphas = []
     for (var i in numbers) {
       var number = numbers[i]
-      if (optionsOrder.length === 0) {
-        alphas.push(String.fromCharCode(Number.parseInt(number) + 64))
-      } else {
-        alphas.push(String.fromCharCode(optionsOrder.indexOf(number) + 65))
+      if (number) {
+        if (optionsOrder.length === 0) {
+          alphas.push(String.fromCharCode(Number.parseInt(number) + 64))
+        } else {
+          alphas.push(String.fromCharCode(optionsOrder.indexOf(number) + 65))
+        }
       }
     }
     alphas.sort()
