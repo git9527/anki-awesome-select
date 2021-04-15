@@ -132,7 +132,7 @@ a {
 .notes-container {
     background-color: white;
     font-size: 13px;
-    max-height: 50px;
+    max-height: 80px;
     overflow-y: scroll;
     color: black;
     border-radius: 5px;
