@@ -1,6 +1,13 @@
 # Anki的选择题模板
 
 ## 更新日志:
+v3.3:
+1. 正确，错误，提示三种选项前新增小图标
+2. 默认模式调整为淡色模式，新增【纯色模式】，用于切换
+3. 适当增加解析部分的字号和高度
+4. 修复iOS Anki记忆卡上直接显示答案时，【你的选项】为@的问题
+5. 修复iOS Anki记忆卡上解析部分字体偏粗的问题
+
 v3.2:
 1. 选中的选项主色调由黄色调整为棕色
 2. ⚠️多选模式下，未选择但正确的选项标示为黄色
@@ -55,7 +62,7 @@ v1.5:
 2. 隐藏选项：适用位置不变的速答题，是否将选项隐藏（仅显示第一个汉字)，记住位置
 3. 随机选项：是否将选项的位置随机打乱
 4. 延迟选项：是否延迟500毫秒显示选项
-5. 淡色模式：用于默认的浓色和淡色切换
+5. 纯色模式：用于默认的淡色和纯色切换
 
 ## 各平台截图
 |平台             | 单选 | 多选 |
@@ -64,7 +71,7 @@ v1.5:
 |Windows         | ![Anki-Windows-Single](screens/2-windows-single.png) | ![Anki-Windows-Multi](screens/2-windows-multi.png) |
 |Ubuntu          | ![Anki-Ubuntu-Single](screens/3-ubuntu-single.png) | ![Anki-Ubuntu-Multi](screens/3-ubuntu-multi.png) |
 |Web             | ![Anki-Web-Single](screens/4-web-single.png) | ![Anki-Web-Multi](screens/4-web-multi.png) |
-|Android         | ![Anki-Android-Single](screens/5-android-single.png) | ![Anki-Android-Multi](screens/5-android-multi.png) |
+|Android         | ![Anki-Android-Single](screens/5-android-single.jpg) | ![Anki-Android-Multi](screens/5-android-multi.jpg) |
 |iOS - AnkiMobile| ![Anki-iOS-Mobile-Single](screens/6-ios-mobile-single.png) | ![Anki-iOS-Mobile-Multi](screens/6-ios-mobile-multi.png) |
 |iOS - Anki记忆卡 | ![Anki-iOS-Card-Single](screens/7-ios-card-single.png) | ![Anki-iOS-Card-Multi](screens/7-ios-card-multi.png) |
 

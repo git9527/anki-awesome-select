@@ -21,7 +21,7 @@
 
 </div>
 
-<div class="footer">v3.2，作者：git9527，开源地址：<a href="https://github.com/git9527/anki-awesome-select">Github</a> | <a href="https://gitee.com/git9527/anki-awesome-select">Gitee</a></div>
+<div class="footer">v3.3，作者：git9527，开源地址：<a href="https://github.com/git9527/anki-awesome-select">Github</a> | <a href="https://gitee.com/git9527/anki-awesome-select">Gitee</a></div>
 
 <div id="answer" style="display:none">{{answer}}</div>
 <div id="options" style="display:none">{{options}}</div>
@@ -30,17 +30,16 @@
 
 <script>
   function showBackOptions() {
-    var _isLightOption = isLightOption()
-    var correctClass = _isLightOption ? 'correct-light' : 'correct'
-    var wrongClass = _isLightOption ? 'wrong-light' : 'wrong'
-    var shouldSelectClass = _isLightOption ? 'should-select-light' : 'should-select'
+    var _isNormalOption = isNormalOption()
+    var correctClass = _isNormalOption ? 'correct' : 'correct-light'
+    var wrongClass = _isNormalOption ? 'wrong' : 'wrong-light'
+    var shouldSelectClass = _isNormalOption ? 'should-select' : 'should-select-light'
     var optionObjs = getOptionObjs()
     var liList = ''
     var isMulti = document.getElementById("answer").innerHTML.indexOf('||') > 0
     for (var i in optionObjs) {
       var _optionObj = optionObjs[i]
-      var prefix = String.fromCharCode(Number.parseInt(i) + 65)
-      var _option = prefix + ". " + _optionObj.label
+      var _option = _optionObj.label
       var _optionKey = _optionObj.key + ''
       var _isSelected = isSelected(_optionKey)
       var _isCorrect = isCorrectAnswer(_optionKey)
@@ -96,9 +95,9 @@
     return optionObjs
   }
 
-  function isLightOption() {
+  function isNormalOption() {
     if (Persistence.isAvailable()) {
-      return Persistence.getItem('ANKI-SETTINGS-LIGHT-OPTIONS') === '1'
+      return Persistence.getItem('ANKI-SETTINGS-NORMAL-OPTIONS') === '1'
     } else {
       return false
     }

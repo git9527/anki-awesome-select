@@ -11,13 +11,13 @@
   </div>
 </div>
 
-<div class="footer">v3.2，作者：git9527，<a href="javascript:showSettings();">卡片设置</a>，开源地址：<a href="https://github.com/git9527/anki-awesome-select">Github</a> | <a href="https://gitee.com/git9527/anki-awesome-select">Gitee</a></div>
+<div class="footer">v3.3，作者：git9527，<a href="javascript:showSettings();">卡片设置</a>，开源地址：<a href="https://github.com/git9527/anki-awesome-select">Github</a> | <a href="https://gitee.com/git9527/anki-awesome-select">Gitee</a></div>
 
 <div id="answer" style="display:none">{{answer}}</div>
 <div id="options" style="display:none">{{options}}</div>
 <div id="tags" style="display:none">{{Tags}}</div>
 
-<div id="settingsModal" class="modal">
+<div id="settingsModal" class="modal" style="display:none">
 
   <div class="modal-content">
     <span class="close" onclick="hideSettings()">&times;</span>
@@ -47,9 +47,9 @@
         </div>
       </div>
       <div class="single-setting">
-        <div class="setting-label">淡色模式</div>
+        <div class="setting-label">纯色模式</div>
         <div class="setting-switch">
-          <input id="light-option" class="mui-switch mui-switch-anim" type="checkbox" onchange="switchLightOption(this)">
+          <input id="normal-option" class="mui-switch mui-switch-anim" type="checkbox" onchange="switchNormalOption(this)">
         </div>
       </div>
     </div>
@@ -63,7 +63,7 @@
   var hideOptions = '0'
   var randomOptions = '0'
   var delayOptions = '0'
-  var lightOptions = '0'
+  var normalOption = '0'
 
   function showFrontOptions(hideOption, randomOption, delayOption) {
     var keySeq = []
@@ -72,11 +72,10 @@
     var liList = ''
     for (var i in optionObjs) {
       var _optionObj = optionObjs[i]
-      var prefix = String.fromCharCode(Number.parseInt(i) + 65)
-      var _option = prefix + '. ' + _optionObj.label
+      var _option = _optionObj.label
       if (hideOption === '1') {
         var endIndex = _optionObj.label.indexOf("《") > -1 ? 2 : 1
-        _option = prefix + '. ' + _optionObj.label.substring(0, endIndex)
+        _option = _optionObj.label.substring(0, endIndex)
       }
       liList += "<li id='" + _optionObj.key + "' class='option' onclick='markSelected(this)'>" + _option + "</li>"
       keySeq.push(_optionObj.key)
@@ -96,8 +95,7 @@
   function initEmptyOptionList(optionObjs) {
     var liList = ''
     for (var i in optionObjs) {
-      var prefix = String.fromCharCode(Number.parseInt(i) + 65)
-      liList += "<li class='option'>" + prefix + ".</li>"
+      liList += "<li class='option'></li>"
     }
     document.getElementById("optionFront").innerHTML = liList
   }
@@ -123,7 +121,7 @@
   }
 
   function getSelectedKey() {
-    return lightOptions === '1' ? "selected-light" : 'selected'
+    return normalOption === '1' ? 'selected' : 'selected-light'
   }
 
   function markSelected(li) {
@@ -209,14 +207,14 @@
       hideOptions = Persistence.getItem('ANKI-SETTINGS-HIDE-OPTIONS') || '0'
       randomOptions = Persistence.getItem('ANKI-SETTINGS-RANDOM-OPTIONS') || '0'
       delayOptions = Persistence.getItem('ANKI-SETTINGS-DELAY-OPTIONS') || '0'
-      lightOptions = Persistence.getItem('ANKI-SETTINGS-LIGHT-OPTIONS') || '0'
+      normalOption = Persistence.getItem('ANKI-SETTINGS-NORMAL-OPTIONS') || '0'
       Persistence.setItem('ANKI-SELECTED', '')
     }
     document.getElementById('hide-option').checked = hideOptions === '1'
     document.getElementById('random-option').checked = randomOptions === '1'
     document.getElementById('show-type').checked = showQuestionType === '1'
     document.getElementById('delay-option').checked = delayOptions === '1'
-    document.getElementById('light-option').checked = lightOptions === '1'
+    document.getElementById('normal-option').checked = normalOption === '1'
     showFrontOptions(hideOptions, randomOptions, delayOptions)
     dealQuestionType(showQuestionType)
   }
@@ -233,8 +231,8 @@
     rerenderOptions(input, 'ANKI-SETTINGS-RANDOM-OPTIONS')
   }
 
-  function switchLightOption(input) {
-    extractKeyFromInputAndSave(input, 'ANKI-SETTINGS-LIGHT-OPTIONS')
+  function switchNormalOption(input) {
+    extractKeyFromInputAndSave(input, 'ANKI-SETTINGS-NORMAL-OPTIONS')
     var selectedKey = getSelectedKey()
     for (var option of document.getElementsByClassName('option')) {
       if (option.className.indexOf(' ') > -1) {
@@ -262,8 +260,8 @@
       delayOptions = key
     } else if (persistKey === 'ANKI-SETTINGS-RANDOM-OPTIONS') {
       randomOptions = key
-    } else if (persistKey === 'ANKI-SETTINGS-LIGHT-OPTIONS') {
-      lightOptions = key
+    } else if (persistKey === 'ANKI-SETTINGS-NORMAL-OPTIONS') {
+      normalOption = key
     } else if (persistKey === 'ANKI-SETTINGS-SHOW-QUESTION-TYPE') {
       showQuestionType = key
     }
@@ -272,7 +270,7 @@
 
   function rerenderOptions(input, persistKey) {
     extractKeyFromInputAndSave(input, persistKey)
-    showFrontOptions(hideOptions, randomOptions, delayOptions, lightOptions)
+    showFrontOptions(hideOptions, randomOptions, delayOptions, normalOption)
   }
 
   function dealQuestionType(showQuestionType) {
