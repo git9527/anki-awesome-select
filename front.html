@@ -11,13 +11,13 @@
   </div>
 </div>
 
-<div class="footer">v3.3，作者：git9527，<a href="javascript:showSettings();">卡片设置</a>，开源地址：<a href="https://github.com/git9527/anki-awesome-select">Github</a> | <a href="https://gitee.com/git9527/anki-awesome-select">Gitee</a></div>
+<div class="footer">v3.4，作者：git9527，<a href="javascript:showSettings();">卡片设置</a>，开源地址：<a href="https://github.com/git9527/anki-awesome-select">Github</a> | <a href="https://gitee.com/git9527/anki-awesome-select">Gitee</a></div>
 
 <div id="answer" style="display:none">{{answer}}</div>
 <div id="options" style="display:none">{{options}}</div>
 <div id="tags" style="display:none">{{Tags}}</div>
 
-<div id="settingsModal" class="modal" style="display:none">
+<div id="settingsModal" class="modal">
 
   <div class="modal-content">
     <span class="close" onclick="hideSettings()">&times;</span>
@@ -52,6 +52,12 @@
           <input id="normal-option" class="mui-switch mui-switch-anim" type="checkbox" onchange="switchNormalOption(this)">
         </div>
       </div>
+      <div class="single-setting">
+        <div class="setting-label">隐藏解析</div>
+        <div class="setting-switch">
+          <input id="hide-notes" class="mui-switch mui-switch-anim" type="checkbox" onchange="switchHideNotes(this)">
+        </div>
+      </div>
     </div>
   </div>
 
@@ -64,6 +70,7 @@
   var randomOptions = '0'
   var delayOptions = '0'
   var normalOption = '0'
+  var hideNotes = '0'
 
   function showFrontOptions(hideOption, randomOption, delayOption) {
     var keySeq = []
@@ -194,7 +201,7 @@
     document.getElementById("settingsModal").style.display = 'none'
   }
 
-  function renameIosSendMessage(){
+  function renameIOsSendMessage(){
     if (window['sendMessage']) {
       window['sendMessage2'] = window['sendMessage']
       window['sendMessage'] = null
@@ -208,6 +215,7 @@
       randomOptions = Persistence.getItem('ANKI-SETTINGS-RANDOM-OPTIONS') || '0'
       delayOptions = Persistence.getItem('ANKI-SETTINGS-DELAY-OPTIONS') || '0'
       normalOption = Persistence.getItem('ANKI-SETTINGS-NORMAL-OPTIONS') || '0'
+      hideNotes = Persistence.getItem('ANKI-SETTINGS-HIDE-NOTES') || '0'
       Persistence.setItem('ANKI-SELECTED', '')
     }
     document.getElementById('hide-option').checked = hideOptions === '1'
@@ -215,6 +223,7 @@
     document.getElementById('show-type').checked = showQuestionType === '1'
     document.getElementById('delay-option').checked = delayOptions === '1'
     document.getElementById('normal-option').checked = normalOption === '1'
+    document.getElementById('hide-notes').checked = hideNotes === '1'
     showFrontOptions(hideOptions, randomOptions, delayOptions)
     dealQuestionType(showQuestionType)
   }
@@ -241,6 +250,10 @@
     }
   }
 
+  function switchHideNotes(input) {
+    extractKeyFromInputAndSave(input, 'ANKI-SETTINGS-HIDE-NOTES')
+  }
+
   function switchShowType(input) {
     extractKeyFromInputAndSave(input, 'ANKI-SETTINGS-SHOW-QUESTION-TYPE')
     dealQuestionType(showQuestionType)
@@ -264,6 +277,8 @@
       normalOption = key
     } else if (persistKey === 'ANKI-SETTINGS-SHOW-QUESTION-TYPE') {
       showQuestionType = key
+    } else if (persistKey === 'ANKI-SETTINGS-HIDE-NOTES') {
+      hideNotes = key
     }
     return key
   }
@@ -283,6 +298,6 @@
 
   applySettings()
   showTags()
-  renameIosSendMessage()
+  renameIOsSendMessage()
 
 </script>

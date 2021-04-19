@@ -14,14 +14,17 @@
   <div class="tips">
     正确选项：<span id="correctAnswer"></span>&nbsp;&nbsp;&nbsp;&nbsp;你的选项：<span id="yourChoice"></span>
   </div>
-  <div id="notes-wrapper">
-    <hr>
-    <div class="notes-container">{{notes}}</div>
-  </div>
-
 </div>
 
-<div class="footer">v3.3，作者：git9527，开源地址：<a href="https://github.com/git9527/anki-awesome-select">Github</a> | <a href="https://gitee.com/git9527/anki-awesome-select">Gitee</a></div>
+<div id="notes-wrapper">
+  <hr>
+  <div class="notes-button-container" onclick="showNotes()">
+    <a href="javascript:showNotes();">显示解析</a>
+  </div>
+  <div class="notes-container">{{notes}}</div>
+</div>
+
+<div class="footer">v3.4，作者：git9527，开源地址：<a href="https://github.com/git9527/anki-awesome-select">Github</a> | <a href="https://gitee.com/git9527/anki-awesome-select">Gitee</a></div>
 
 <div id="answer" style="display:none">{{answer}}</div>
 <div id="options" style="display:none">{{options}}</div>
@@ -87,7 +90,7 @@
       })
     }
     if (Persistence.isAvailable()) {
-      var optionsOrder = Persistence.getItem('ANKI-OPTIONS-ORDER').trim().split(',')
+      var optionsOrder = (Persistence.getItem('ANKI-OPTIONS-ORDER') || '').trim().split(',')
       optionObjs = optionObjs.sort(function(a, b) {
         return optionsOrder.indexOf(a.key + '') - optionsOrder.indexOf(b.key + '')
       })
@@ -139,7 +142,7 @@
   function showAnswers() {
     document.getElementById("correctAnswer").innerHTML = numberToAlpha(document.getElementById("answer").innerHTML.trim().split('||'))
     if (Persistence.isAvailable()) {
-      var selectedNumbers = Persistence.getItem('ANKI-SELECTED').trim().split(',')
+      var selectedNumbers = (Persistence.getItem('ANKI-SELECTED') || '').trim().split(',')
       document.getElementById("yourChoice").innerHTML = numberToAlpha(selectedNumbers)
       Persistence.setItem('ANKI-SELECTED', '')
     }
@@ -147,14 +150,42 @@
   }
 
   function showNotes() {
-    if (document.getElementById('notes').innerText) {
+    if (document.getElementById('notes').innerHTML) {
       document.getElementById('notes-wrapper').style.display = 'block'
+      var totalHeight = window.innerHeight
+      var left = totalHeight - document.getElementsByClassName('wrap-container')[0].clientHeight - 140
+      if (left < 80) {
+        left = 80
+      }
+      var noteContainer = document.getElementsByClassName('notes-container')[0]
+      noteContainer.style.maxHeight = left + 'px'
+      noteContainer.style.display = 'block'
+      document.getElementsByClassName('notes-button-container')[0].style.display = 'none'
+    }
+  }
+
+  function showNoteButton() {
+    if (document.getElementById('notes').innerHTML) {
+      document.getElementsByClassName('notes-button-container')[0].style.display = 'block'
+      document.getElementById('notes-wrapper').style.display = 'block'
+    }
+  }
+
+  function prepareNotes() {
+    if (Persistence.isAvailable()) {
+      if (Persistence.getItem('ANKI-SETTINGS-HIDE-NOTES') !== '1') {
+        showNotes()
+      } else {
+        showNoteButton()
+      }
+    } else {
+      showNotes()
     }
   }
 
   showBackOptions()
   showTags()
   showAnswers()
-  showNotes()
+  prepareNotes()
 
 </script>
