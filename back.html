@@ -148,6 +148,8 @@
       var showQuestionType = Persistence.getItem('ANKI-SETTINGS-SHOW-QUESTION-TYPE') || '0'
       if (showQuestionType === '1') {
         document.getElementById('questionType').innerHTML = document.getElementById("answer").innerHTML.indexOf('||') > -1 ? '【多选】' : '【单选】'
+      } else {
+        document.getElementById('questionType').innerHTML = ' '
       }
     }
   }
