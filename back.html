@@ -24,7 +24,7 @@
   <div class="notes-container">{{notes}}</div>
 </div>
 
-<div class="footer">v3.5，作者：git9527，开源地址：<a href="https://github.com/git9527/anki-awesome-select">Github</a> | <a href="https://gitee.com/git9527/anki-awesome-select">Gitee</a></div>
+<div class="footer">v3.6，作者：git9527，开源地址：<a href="https://github.com/git9527/anki-awesome-select">Github</a> | <a href="https://gitee.com/git9527/anki-awesome-select">Gitee</a></div>
 
 <div id="answer" style="display:none">{{answer}}</div>
 <div id="options" style="display:none">{{options}}</div>
@@ -145,8 +145,11 @@
       var selectedNumbers = (Persistence.getItem('ANKI-SELECTED') || '').trim().split(',')
       document.getElementById("yourChoice").innerHTML = numberToAlpha(selectedNumbers)
       Persistence.setItem('ANKI-SELECTED', '')
+      var showQuestionType = Persistence.getItem('ANKI-SETTINGS-SHOW-QUESTION-TYPE') || '0'
+      if (showQuestionType === '1') {
+        document.getElementById('questionType').innerHTML = document.getElementById("answer").innerHTML.indexOf('||') > -1 ? '【多选】' : '【单选】'
+      }
     }
-    document.getElementById('questionType').innerHTML = document.getElementById("answer").innerHTML.indexOf('||') > -1 ? '【多选】' : '【单选】'
   }
 
   function showNotes() {
