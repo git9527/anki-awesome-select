@@ -58,10 +58,8 @@
           _class = 'option'
         }
       } else {
-        if (_isCorrect && _isSelected) {
+        if (_isCorrect) {
           _class = 'option ' + correctClass
-        } else if (_isCorrect && !_isSelected) {
-          _class = 'option ' + shouldSelectClass
         } else {
           _class = _isSelected ? 'option ' + wrongClass : 'option'
         }
