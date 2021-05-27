@@ -6,10 +6,91 @@
 <div class="wrap-container">
   <div class="body">
     <div class="question">{{id}}.<span id="questionType" class="question-type"> </span>{{cloze:question}}</div>
-    <div class="options" id="optionBack"></div>
+    <div class="options" id="options-container">
+      <li class="option"> </li>
+      <li class="option"> </li>
+    </div>
     <div id="tagBack"></div>
   </div>
   <hr>
+
+  <script>
+    function showBackOptions() {
+      var _isNormalOption = isNormalOption()
+      var correctClass = _isNormalOption ? 'correct' : 'correct-light'
+      var wrongClass = _isNormalOption ? 'wrong' : 'wrong-light'
+      var shouldSelectClass = _isNormalOption ? 'should-select' : 'should-select-light'
+      var optionObjs = getOptionObjs()
+      var liList = ''
+      var isMulti = "{{answer}}".indexOf('||') > 0
+      for (var i in optionObjs) {
+        var _optionObj = optionObjs[i]
+        var _option = _optionObj.label
+        var _optionKey = _optionObj.key + ''
+        var _isSelected = isSelected(_optionKey)
+        var _isCorrect = isCorrectAnswer(_optionKey)
+        var _class = ''
+        if (isMulti) {
+          if (_isSelected && _isCorrect) {
+            _class = 'option ' + correctClass
+          } else if (!_isSelected && _isCorrect) {
+            _class = 'option ' + shouldSelectClass
+          } else if (_isSelected && !_isCorrect) {
+            _class = 'option ' + wrongClass
+          } else {
+            _class = 'option'
+          }
+        } else {
+          if (_isCorrect) {
+            _class = 'option ' + correctClass
+          } else {
+            _class = _isSelected ? 'option ' + wrongClass : 'option'
+          }
+        }
+        liList += "<li class='" + _class + "'>" + _option + "</li>"
+      }
+      document.getElementById("options-container").innerHTML = liList
+    }
+
+    function isCorrectAnswer(optionKey) {
+      return "{{answer}}".indexOf(optionKey) > -1
+    }
+
+    function isSelected(optionKey) {
+      if (!Persistence.isAvailable()) {
+        return false
+      }
+      return (Persistence.getItem('ANKI-SELECTED') || '').indexOf(optionKey) > -1
+    }
+
+    function getOptionObjs() {
+      var optionArray = "{{options}}".trim().split("||")
+      var optionObjs = []
+      for (var i in optionArray) {
+        optionObjs.push({
+          key: Number.parseInt(i) + 1,
+          label: optionArray[i]
+        })
+      }
+      if (Persistence.isAvailable()) {
+        var optionsOrder = (Persistence.getItem('ANKI-OPTIONS-ORDER') || '').trim().split(',')
+        optionObjs = optionObjs.sort(function(a, b) {
+          return optionsOrder.indexOf(a.key + '') - optionsOrder.indexOf(b.key + '')
+        })
+      }
+      return optionObjs
+    }
+
+    function isNormalOption() {
+      if (Persistence.isAvailable()) {
+        return Persistence.getItem('ANKI-SETTINGS-NORMAL-OPTIONS') === '1'
+      } else {
+        return false
+      }
+    }
+
+    showBackOptions()
+  </script>
 
   <div class="tips">
     正确选项：<span id="correctAnswer"></span>&nbsp;&nbsp;&nbsp;&nbsp;你的选项：<span id="yourChoice"></span>
@@ -24,90 +105,14 @@
   <div class="notes-container">{{notes}}</div>
 </div>
 
-<div class="footer">v3.8，作者：git9527，开源地址：<a href="https://github.com/git9527/anki-awesome-select">Github</a> | <a href="https://gitee.com/git9527/anki-awesome-select">Gitee</a></div>
+<div class="footer">v3.9，作者：git9527，开源地址：<a href="https://github.com/git9527/anki-awesome-select">Github</a> | <a href="https://gitee.com/git9527/anki-awesome-select">Gitee</a></div>
 
-<div id="answer" style="display:none">{{answer}}</div>
-<div id="options" style="display:none">{{options}}</div>
-<div id="tags" style="display:none">{{Tags}}</div>
 <div id="notes" style="display:none">{{notes}}</div>
 
 <script>
-  function showBackOptions() {
-    var _isNormalOption = isNormalOption()
-    var correctClass = _isNormalOption ? 'correct' : 'correct-light'
-    var wrongClass = _isNormalOption ? 'wrong' : 'wrong-light'
-    var shouldSelectClass = _isNormalOption ? 'should-select' : 'should-select-light'
-    var optionObjs = getOptionObjs()
-    var liList = ''
-    var isMulti = document.getElementById("answer").innerHTML.indexOf('||') > 0
-    for (var i in optionObjs) {
-      var _optionObj = optionObjs[i]
-      var _option = _optionObj.label
-      var _optionKey = _optionObj.key + ''
-      var _isSelected = isSelected(_optionKey)
-      var _isCorrect = isCorrectAnswer(_optionKey)
-      var _class = ''
-      if (isMulti) {
-        if (_isSelected && _isCorrect) {
-          _class = 'option ' + correctClass
-        } else if (!_isSelected && _isCorrect) {
-          _class = 'option ' + shouldSelectClass
-        } else if (_isSelected && !_isCorrect) {
-          _class = 'option ' + wrongClass
-        } else {
-          _class = 'option'
-        }
-      } else {
-        if (_isCorrect) {
-          _class = 'option ' + correctClass
-        } else {
-          _class = _isSelected ? 'option ' + wrongClass : 'option'
-        }
-      }
-      liList += "<li class='" + _class + "'>" + _option + "</li>"
-    }
-    document.getElementById("optionBack").innerHTML = liList
-  }
-
-  function isCorrectAnswer(optionKey) {
-    return document.getElementById("answer").innerHTML.indexOf(optionKey) > -1
-  }
-
-  function isSelected(optionKey) {
-    if (!Persistence.isAvailable()) {
-      return false
-    }
-    return (Persistence.getItem('ANKI-SELECTED') || '').indexOf(optionKey) > -1
-  }
-
-  function getOptionObjs() {
-    var optionArray = document.getElementById("options").innerHTML.trim().split("||")
-    var optionObjs = []
-    for (var i in optionArray) {
-      optionObjs.push({
-        key: Number.parseInt(i) + 1,
-        label: optionArray[i]
-      })
-    }
-    if (Persistence.isAvailable()) {
-      var optionsOrder = (Persistence.getItem('ANKI-OPTIONS-ORDER') || '').trim().split(',')
-      optionObjs = optionObjs.sort(function(a, b) {
-        return optionsOrder.indexOf(a.key + '') - optionsOrder.indexOf(b.key + '')
-      })
-    }
-    return optionObjs
-  }
-
-  function isNormalOption() {
-    if (Persistence.isAvailable()) {
-      return Persistence.getItem('ANKI-SETTINGS-NORMAL-OPTIONS') === '1'
-    } else {
-      return false
-    }
-  }
 
   function showTags () {
-    var tags = document.getElementById("tags").innerHTML.trim()
+    var tags = "{{Tags}}".trim()
     if (!tags) return
     tags = tags.split(' ')
     var tagList = '<span class="tag-title">标签: </span>'
@@ -140,14 +145,14 @@
   }
 
   function showAnswers() {
-    document.getElementById("correctAnswer").innerHTML = numberToAlpha(document.getElementById("answer").innerHTML.trim().split('||'))
+    document.getElementById("correctAnswer").innerHTML = numberToAlpha("{{answer}}".trim().split('||'))
     if (Persistence.isAvailable()) {
       var selectedNumbers = (Persistence.getItem('ANKI-SELECTED') || '').trim().split(',')
       document.getElementById("yourChoice").innerHTML = numberToAlpha(selectedNumbers) || '未选择'
       Persistence.setItem('ANKI-SELECTED', '')
       var showQuestionType = Persistence.getItem('ANKI-SETTINGS-SHOW-QUESTION-TYPE') || '0'
       if (showQuestionType === '1') {
-        document.getElementById('questionType').innerHTML = document.getElementById("answer").innerHTML.indexOf('||') > -1 ? '【多选】' : '【单选】'
+        document.getElementById('questionType').innerHTML = "{{answer}}".indexOf('||') > -1 ? '【多选】' : '【单选】'
       } else {
         document.getElementById('questionType').innerHTML = ' '
       }
@@ -188,7 +193,6 @@
     }
   }
 
-  showBackOptions()
   showTags()
   showAnswers()
   prepareNotes()

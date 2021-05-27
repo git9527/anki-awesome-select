@@ -11,11 +11,7 @@
   </div>
 </div>
 
-<div class="footer">v3.8，作者：git9527，<a href="javascript:showSettings();">卡片设置</a>，开源地址：<a href="https://github.com/git9527/anki-awesome-select">Github</a> | <a href="https://gitee.com/git9527/anki-awesome-select">Gitee</a></div>
-
-<div id="answer" style="display:none">{{answer}}</div>
-<div id="options" style="display:none">{{options}}</div>
-<div id="tags" style="display:none">{{Tags}}</div>
+<div class="footer">v3.9，作者：git9527，<a href="javascript:showSettings();">卡片设置</a>，开源地址：<a href="https://github.com/git9527/anki-awesome-select">Github</a> | <a href="https://gitee.com/git9527/anki-awesome-select">Gitee</a></div>
 
 <div id="settingsModal" class="modal">
 
@@ -108,7 +104,7 @@
   }
 
   function getOptionObjs(randomOption) {
-    var optionArray = document.getElementById("options").innerHTML.trim().split("||")
+    var optionArray = "{{options}}".trim().split("||")
     var optionObjs = []
     for (var i in optionArray) {
       optionObjs.push({
@@ -134,7 +130,7 @@
   function markSelected(li) {
     var selectedKey = getSelectedKey()
     // 对应多选
-    if (document.getElementById("answer").innerHTML.indexOf('||') > 0) {
+    if ("{{answer}}".indexOf('||') > 0) {
       if (Persistence.isAvailable()) {
         var selectedArray = Persistence.getItem('ANKI-SELECTED') ? Persistence.getItem('ANKI-SELECTED').split(',') : []
         if (li.className.indexOf(selectedKey) > 0) {
@@ -144,7 +140,7 @@
         }
         selectedArray.sort()
         Persistence.setItem('ANKI-SELECTED', selectedArray.toString())
-        if (selectedArray.length === document.getElementById("answer").innerHTML.trim().split('||').length) {
+        if (selectedArray.length === "{{answer}}".trim().split('||').length) {
           setTimeout(function () {
             flipToBack()
           }, 100)
@@ -181,7 +177,7 @@
   }
 
   function showTags () {
-    var tags = document.getElementById("tags").innerHTML
+    var tags = "{{Tags}}"
     if (!tags) return
     tags = tags.split(' ')
     var tagList = '<span class="tag-title">标签: </span>'
@@ -290,7 +286,7 @@
 
   function dealQuestionType(showQuestionType) {
     if (showQuestionType === '1') {
-      document.getElementById('questionType').innerHTML = document.getElementById("answer").innerHTML.indexOf('||') > -1 ? '【多选】' : '【单选】'
+      document.getElementById('questionType').innerHTML = "{{answer}}".indexOf('||') > -1 ? '【多选】' : '【单选】'
     } else {
       document.getElementById('questionType').innerHTML = ' '
     }
