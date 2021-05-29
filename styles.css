@@ -36,6 +36,10 @@
 
 .option:before {
     content: counter(optionCount, upper-alpha)'. ';
+    display: inline-block;
+    width: 25px;
+    margin-right: -2px;
+    text-align: center;
 }
 
 .options input[name="options"] {
