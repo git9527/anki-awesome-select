@@ -6,12 +6,12 @@
 <div class="wrap-container">
   <div class="body">
     <div class="question">{{id}}.<span id="questionType" class="question-type"> </span>{{cloze:question}}</div>
-    <div class="options" id="optionFront"></div>
-    <div id="tagFront"></div>
+    <div class="options" id="front-options"></div>
+    <div id="front-tag"></div>
   </div>
 </div>
 
-<div class="footer">v3.9，作者：git9527，<a href="javascript:showSettings();">卡片设置</a>，开源地址：<a href="https://github.com/git9527/anki-awesome-select">Github</a> | <a href="https://gitee.com/git9527/anki-awesome-select">Gitee</a></div>
+<div id="front-footer" class="footer">v3.10，作者：git9527</div>
 
 <div id="settingsModal" class="modal">
 
@@ -46,10 +46,10 @@
     }
     if (delayOption === '1') {
       setTimeout(function () {
-        document.getElementById("optionFront").innerHTML = liList
+        document.getElementById("front-options").innerHTML = liList
       }, 1500)
     } else {
-      document.getElementById("optionFront").innerHTML = liList
+      document.getElementById("front-options").innerHTML = liList
     }
   }
 
@@ -58,7 +58,7 @@
     for (var i in optionObjs) {
       liList += "<li class='option'></li>"
     }
-    document.getElementById("optionFront").innerHTML = liList
+    document.getElementById("front-options").innerHTML = liList
   }
 
   function getOptionObjs(randomOption) {
@@ -144,7 +144,7 @@
         tagList += '<span class="single-tag">' + tag + '</span>'
       }
     }
-    document.getElementById("tagFront").innerHTML = tagList
+    document.getElementById("front-tag").innerHTML = tagList
   }
 
   function showSettings() {
@@ -294,9 +294,14 @@
       '  </div>'
   }
 
+  function updateFrontFooter() {
+    document.getElementById("front-footer").insertAdjacentHTML('beforeend', '，<a href="javascript:showSettings();">卡片设置</a>，开源地址：<a href="https://github.com/git9527/anki-awesome-select">Github</a> | <a href="https://gitee.com/git9527/anki-awesome-select">Gitee</a>');
+  }
+
   showTags()
   renameIOsSendMessage()
   addModelContent()
   applySettings()
+  updateFrontFooter()
 
 </script>

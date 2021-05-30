@@ -10,7 +10,7 @@
       <li class="option"> </li>
       <li class="option"> </li>
     </div>
-    <div id="tagBack"></div>
+    <div id="back-tag"></div>
   </div>
   <hr>
 
@@ -102,7 +102,7 @@
 
 </div>
 
-<div class="footer">v3.9，作者：git9527，开源地址：<a href="https://github.com/git9527/anki-awesome-select">Github</a> | <a href="https://gitee.com/git9527/anki-awesome-select">Gitee</a></div>
+<div id="back-footer" class="footer">v3.10，作者：git9527</div>
 
 <script>
 
@@ -116,7 +116,7 @@
         tagList += '<span class="single-tag">' + tag + '</span>'
       }
     }
-    document.getElementById("tagBack").innerHTML = tagList
+    document.getElementById("back-tag").innerHTML = tagList
   }
 
   function numberToAlpha(numbers) {
@@ -196,8 +196,13 @@
     }
   }
 
+  function updateBackFooter() {
+    document.getElementById("back-footer").insertAdjacentHTML('beforeend', '，开源地址：<a href="https://github.com/git9527/anki-awesome-select">Github</a> | <a href="https://gitee.com/git9527/anki-awesome-select">Gitee</a>');
+  }
+
   showTags()
   showAnswers()
   prepareNotes()
+  updateBackFooter()
 
 </script>
