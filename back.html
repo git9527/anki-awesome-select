@@ -6,7 +6,7 @@
 <div class="wrap-container">
   <div class="body">
     <div class="question">{{id}}.<span id="questionType" class="question-type"> </span>{{cloze:question}}</div>
-    <div class="options" id="options-container">
+    <div class="options" id="back-options">
       <li class="option"> </li>
       <li class="option"> </li>
     </div>
@@ -49,7 +49,7 @@
         }
         liList += "<li class='" + _class + "'>" + _option + "</li>"
       }
-      document.getElementById("options-container").innerHTML = liList
+      document.getElementById("back-options").innerHTML = liList
     }
 
     function isCorrectAnswer(optionKey) {
@@ -92,22 +92,17 @@
     showBackOptions()
   </script>
 
-  <div class="tips">
-    正确选项：<span id="correctAnswer"></span>&nbsp;&nbsp;&nbsp;&nbsp;你的选项：<span id="yourChoice"></span>
+  <div id="tips" class="tips">
+
   </div>
+
 </div>
 
 <div id="notes-wrapper">
-  <hr>
-  <div class="notes-button-container" onclick="showNotes()">
-    <a href="javascript:showNotes();">显示解析</a>
-  </div>
-  <div class="notes-container">{{notes}}</div>
+
 </div>
 
 <div class="footer">v3.9，作者：git9527，开源地址：<a href="https://github.com/git9527/anki-awesome-select">Github</a> | <a href="https://gitee.com/git9527/anki-awesome-select">Gitee</a></div>
-
-<div id="notes" style="display:none">{{notes}}</div>
 
 <script>
 
@@ -145,10 +140,11 @@
   }
 
   function showAnswers() {
-    document.getElementById("correctAnswer").innerHTML = numberToAlpha("{{answer}}".trim().split('||'))
+    var correctAnswers = numberToAlpha("{{answer}}".trim().split('||'))
+    var yourChoice = '未选择'
     if (Persistence.isAvailable()) {
       var selectedNumbers = (Persistence.getItem('ANKI-SELECTED') || '').trim().split(',')
-      document.getElementById("yourChoice").innerHTML = numberToAlpha(selectedNumbers) || '未选择'
+      yourChoice = numberToAlpha(selectedNumbers)
       Persistence.setItem('ANKI-SELECTED', '')
       var showQuestionType = Persistence.getItem('ANKI-SETTINGS-SHOW-QUESTION-TYPE') || '0'
       if (showQuestionType === '1') {
@@ -157,10 +153,11 @@
         document.getElementById('questionType').innerHTML = ' '
       }
     }
+    document.getElementById('tips').innerHTML = '正确选项：' + correctAnswers + '&nbsp;&nbsp;&nbsp;&nbsp;你的选项：' + yourChoice
   }
 
   function showNotes() {
-    if (document.getElementById('notes').innerHTML) {
+    if (document.getElementsByClassName('notes-container')[0].innerHTML) {
       document.getElementById('notes-wrapper').style.display = 'block'
       var totalHeight = window.innerHeight
       var left = totalHeight - document.getElementsByClassName('wrap-container')[0].clientHeight - 140
@@ -175,13 +172,19 @@
   }
 
   function showNoteButton() {
-    if (document.getElementById('notes').innerHTML) {
+    if (document.getElementsByClassName('notes-container')[0].innerHTML) {
       document.getElementsByClassName('notes-button-container')[0].style.display = 'block'
       document.getElementById('notes-wrapper').style.display = 'block'
     }
   }
 
   function prepareNotes() {
+    document.getElementById('notes-wrapper').innerHTML = '  <hr>\n' +
+      '  <div class="notes-button-container" onclick="showNotes()">\n' +
+      '    <a href="javascript:showNotes();">显示解析</a>\n' +
+      '  </div>\n' +
+      '  <div class="notes-container"></div>'
+    document.getElementsByClassName('notes-container')[0].innerHTML = '{{notes}}'
     if (Persistence.isAvailable()) {
       if (Persistence.getItem('ANKI-SETTINGS-HIDE-NOTES') !== '1') {
         showNotes()
