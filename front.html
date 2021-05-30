@@ -15,48 +15,6 @@
 
 <div id="settingsModal" class="modal">
 
-  <div class="modal-content">
-    <span class="close" onclick="hideSettings()">&times;</span>
-    <div class="settings-block">
-      <div class="single-setting">
-        <div class="setting-label">显示类型</div>
-        <div class="setting-switch">
-          <input id="show-type" class="mui-switch mui-switch-anim" type="checkbox" onchange="switchShowType(this)">
-        </div>
-      </div>
-      <div class="single-setting">
-        <div class="setting-label">隐藏选项</div>
-        <div class="setting-switch">
-          <input id="hide-option" class="mui-switch mui-switch-anim" type="checkbox" onchange="switchHideOption(this)">
-        </div>
-      </div>
-      <div class="single-setting">
-        <div class="setting-label">随机选项</div>
-        <div class="setting-switch">
-          <input id="random-option" class="mui-switch mui-switch-anim" type="checkbox" onchange="switchRandomOption(this)">
-        </div>
-      </div>
-      <div class="single-setting">
-        <div class="setting-label">延迟选项</div>
-        <div class="setting-switch">
-          <input id="delay-option" class="mui-switch mui-switch-anim" type="checkbox" onchange="switchDelayOption(this)">
-        </div>
-      </div>
-      <div class="single-setting">
-        <div class="setting-label">纯色模式</div>
-        <div class="setting-switch">
-          <input id="normal-option" class="mui-switch mui-switch-anim" type="checkbox" onchange="switchNormalOption(this)">
-        </div>
-      </div>
-      <div class="single-setting">
-        <div class="setting-label">隐藏解析</div>
-        <div class="setting-switch">
-          <input id="hide-notes" class="mui-switch mui-switch-anim" type="checkbox" onchange="switchHideNotes(this)">
-        </div>
-      </div>
-    </div>
-  </div>
-
 </div>
 
 <script>
@@ -292,8 +250,53 @@
     }
   }
 
-  applySettings()
+  function addModelContent() {
+    document.getElementById('settingsModal').innerHTML = '<div class="modal-content">\n' +
+      '    <span class="close" onclick="hideSettings()">&times;</span>\n' +
+      '    <div class="settings-block">\n' +
+      '      <div class="single-setting">\n' +
+      '        <div class="setting-label">显示类型</div>\n' +
+      '        <div class="setting-switch">\n' +
+      '          <input id="show-type" class="mui-switch mui-switch-anim" type="checkbox" onchange="switchShowType(this)">\n' +
+      '        </div>\n' +
+      '      </div>\n' +
+      '      <div class="single-setting">\n' +
+      '        <div class="setting-label">隐藏选项</div>\n' +
+      '        <div class="setting-switch">\n' +
+      '          <input id="hide-option" class="mui-switch mui-switch-anim" type="checkbox" onchange="switchHideOption(this)">\n' +
+      '        </div>\n' +
+      '      </div>\n' +
+      '      <div class="single-setting">\n' +
+      '        <div class="setting-label">随机选项</div>\n' +
+      '        <div class="setting-switch">\n' +
+      '          <input id="random-option" class="mui-switch mui-switch-anim" type="checkbox" onchange="switchRandomOption(this)">\n' +
+      '        </div>\n' +
+      '      </div>\n' +
+      '      <div class="single-setting">\n' +
+      '        <div class="setting-label">延迟选项</div>\n' +
+      '        <div class="setting-switch">\n' +
+      '          <input id="delay-option" class="mui-switch mui-switch-anim" type="checkbox" onchange="switchDelayOption(this)">\n' +
+      '        </div>\n' +
+      '      </div>\n' +
+      '      <div class="single-setting">\n' +
+      '        <div class="setting-label">纯色模式</div>\n' +
+      '        <div class="setting-switch">\n' +
+      '          <input id="normal-option" class="mui-switch mui-switch-anim" type="checkbox" onchange="switchNormalOption(this)">\n' +
+      '        </div>\n' +
+      '      </div>\n' +
+      '      <div class="single-setting">\n' +
+      '        <div class="setting-label">隐藏解析</div>\n' +
+      '        <div class="setting-switch">\n' +
+      '          <input id="hide-notes" class="mui-switch mui-switch-anim" type="checkbox" onchange="switchHideNotes(this)">\n' +
+      '        </div>\n' +
+      '      </div>\n' +
+      '    </div>\n' +
+      '  </div>'
+  }
+
   showTags()
   renameIOsSendMessage()
+  addModelContent()
+  applySettings()
 
 </script>
