@@ -11,7 +11,7 @@
   </div>
 </div>
 
-<div id="front-footer" class="footer">v3.10，作者：git9527</div>
+<div id="front-footer" class="footer">v3.11，作者：git9527</div>
 
 <div id="settingsModal" class="modal">
 
@@ -25,6 +25,7 @@
   var delayOptions = '0'
   var normalOption = '0'
   var hideNotes = '0'
+  var autoFlip = '1'
 
   function showFrontOptions(hideOption, randomOption, delayOption) {
     var keySeq = []
@@ -98,7 +99,7 @@
         }
         selectedArray.sort()
         Persistence.setItem('ANKI-SELECTED', selectedArray.toString())
-        if (selectedArray.length === "{{answer}}".trim().split('||').length) {
+        if (selectedArray.length === "{{answer}}".trim().split('||').length && autoFlip === '1') {
           setTimeout(function () {
             flipToBack()
           }, 100)
@@ -116,9 +117,11 @@
       if (Persistence.isAvailable()) {
         Persistence.setItem('ANKI-SELECTED', li.id)
       }
-      setTimeout(function () {
-        flipToBack()
-      }, 100)
+      if (autoFlip === '1') {
+        setTimeout(function () {
+          flipToBack()
+        }, 100)
+      }
     }
   }
 
@@ -170,6 +173,7 @@
       delayOptions = Persistence.getItem('ANKI-SETTINGS-DELAY-OPTIONS') || '0'
       normalOption = Persistence.getItem('ANKI-SETTINGS-NORMAL-OPTIONS') || '0'
       hideNotes = Persistence.getItem('ANKI-SETTINGS-HIDE-NOTES') || '0'
+      autoFlip = Persistence.getItem('ANKI-SETTINGS-AUTO-FLIP') || '1'
       Persistence.setItem('ANKI-SELECTED', '')
     }
     document.getElementById('hide-option').checked = hideOptions === '1'
@@ -178,6 +182,7 @@
     document.getElementById('delay-option').checked = delayOptions === '1'
     document.getElementById('normal-option').checked = normalOption === '1'
     document.getElementById('hide-notes').checked = hideNotes === '1'
+    document.getElementById('auto-flip').checked = autoFlip === '1'
     showFrontOptions(hideOptions, randomOptions, delayOptions)
     dealQuestionType(showQuestionType)
   }
@@ -213,6 +218,10 @@
     dealQuestionType(showQuestionType)
   }
 
+  function switchAutoFlip(input) {
+    extractKeyFromInputAndSave(input, 'ANKI-SETTINGS-AUTO-FLIP')
+  }
+
   function extractKeyFromInputAndSave(input, persistKey) {
     var key = input.checked ? '1' : '0'
     if (Persistence.isAvailable()) {
@@ -233,6 +242,8 @@
       showQuestionType = key
     } else if (persistKey === 'ANKI-SETTINGS-HIDE-NOTES') {
       hideNotes = key
+    } else if (persistKey === 'ANKI-SETTINGS-AUTO-FLIP') {
+      autoFlip = key
     }
     return key
   }
@@ -288,6 +299,12 @@
       '        <div class="setting-label">隐藏解析</div>\n' +
       '        <div class="setting-switch">\n' +
       '          <input id="hide-notes" class="mui-switch mui-switch-anim" type="checkbox" onchange="switchHideNotes(this)">\n' +
+      '        </div>\n' +
+      '      </div>\n' +
+      '      <div class="single-setting">\n' +
+      '        <div class="setting-label">自动翻转</div>\n' +
+      '        <div class="setting-switch">\n' +
+      '          <input id="auto-flip" class="mui-switch mui-switch-anim" type="checkbox" onchange="switchAutoFlip(this)">\n' +
       '        </div>\n' +
       '      </div>\n' +
       '    </div>\n' +
