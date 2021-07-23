@@ -11,7 +11,7 @@
   </div>
 </div>
 
-<div id="front-footer" class="footer">v3.11，作者：git9527</div>
+<div id="front-footer" class="footer">v3.12，作者：git9527</div>
 
 <div id="settingsModal" class="modal">
 
@@ -19,13 +19,22 @@
 
 <script>
 
-  var showQuestionType = '0'
-  var hideOptions = '0'
-  var randomOptions = '0'
-  var delayOptions = '0'
-  var normalOption = '0'
-  var hideNotes = '0'
-  var autoFlip = '1'
+  var DEFAULT_SHOW_QUESTION_TYPE = '0'
+  var DEFAULT_HIDE_OPTIONS = '0'
+  var DEFAULT_RANDOM_OPTIONS = '0'
+  var DEFAULT_DELAY_OPTIONS = '0'
+  var DEFAULT_NORMAL_OPTIONS = '0'
+  var DEFAULT_HIDE_NOTES = '0'
+  var DEFAULT_AUTO_FLIP = '0'
+
+
+  var showQuestionType = DEFAULT_SHOW_QUESTION_TYPE
+  var hideOptions = DEFAULT_HIDE_OPTIONS
+  var randomOptions = DEFAULT_RANDOM_OPTIONS
+  var delayOptions = DEFAULT_DELAY_OPTIONS
+  var normalOption = DEFAULT_NORMAL_OPTIONS
+  var hideNotes = DEFAULT_HIDE_NOTES
+  var autoFlip = DEFAULT_AUTO_FLIP
 
   function showFrontOptions(hideOption, randomOption, delayOption) {
     var keySeq = []
@@ -167,13 +176,13 @@
 
   function applySettings() {
     if (Persistence.isAvailable()) {
-      showQuestionType = Persistence.getItem('ANKI-SETTINGS-SHOW-QUESTION-TYPE') || '0'
-      hideOptions = Persistence.getItem('ANKI-SETTINGS-HIDE-OPTIONS') || '0'
-      randomOptions = Persistence.getItem('ANKI-SETTINGS-RANDOM-OPTIONS') || '0'
-      delayOptions = Persistence.getItem('ANKI-SETTINGS-DELAY-OPTIONS') || '0'
-      normalOption = Persistence.getItem('ANKI-SETTINGS-NORMAL-OPTIONS') || '0'
-      hideNotes = Persistence.getItem('ANKI-SETTINGS-HIDE-NOTES') || '0'
-      autoFlip = Persistence.getItem('ANKI-SETTINGS-AUTO-FLIP') || '1'
+      showQuestionType = Persistence.getItem('ANKI-SETTINGS-SHOW-QUESTION-TYPE') || DEFAULT_SHOW_QUESTION_TYPE
+      hideOptions = Persistence.getItem('ANKI-SETTINGS-HIDE-OPTIONS') || DEFAULT_HIDE_OPTIONS
+      randomOptions = Persistence.getItem('ANKI-SETTINGS-RANDOM-OPTIONS') || DEFAULT_RANDOM_OPTIONS
+      delayOptions = Persistence.getItem('ANKI-SETTINGS-DELAY-OPTIONS') || DEFAULT_DELAY_OPTIONS
+      normalOption = Persistence.getItem('ANKI-SETTINGS-NORMAL-OPTIONS') || DEFAULT_NORMAL_OPTIONS
+      hideNotes = Persistence.getItem('ANKI-SETTINGS-HIDE-NOTES') || DEFAULT_HIDE_NOTES
+      autoFlip = Persistence.getItem('ANKI-SETTINGS-AUTO-FLIP') || DEFAULT_AUTO_FLIP
       Persistence.setItem('ANKI-SELECTED', '')
     }
     document.getElementById('hide-option').checked = hideOptions === '1'
