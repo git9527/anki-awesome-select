@@ -4,6 +4,10 @@
 https://zhangsn.me/anki-awesome-select/
 
 ## 更新日志:
+v3.13:
+1. 修复选项中图片的显示问题
+2. 调整许可类型为GPL
+
 v3.12:
 1. 重构代码，对于想关闭【自动翻转】的同学，可以直接将卡片正面源码中的`var DEFAULT_AUTO_FLIP = '1'`中的`1`改为`0`
 
