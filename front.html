@@ -11,7 +11,7 @@
   </div>
 </div>
 
-<div id="front-footer" class="footer">v3.13，作者：git9527</div>
+<div id="front-footer" class="footer">v3.14，作者：git9527</div>
 
 <div id="settingsModal" class="modal">
 
@@ -267,6 +267,9 @@
       document.getElementById('questionType').innerHTML = "{{answer}}".indexOf('||') > -1 ? '【多选】' : '【单选】'
     } else {
       document.getElementById('questionType').innerHTML = ' '
+    }
+    if (Persistence.isAvailable()) {
+      Persistence.setItem('ANKI-SETTINGS-SHOW-QUESTION-TYPE', showQuestionType)
     }
   }
 
