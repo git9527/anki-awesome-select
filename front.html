@@ -11,7 +11,7 @@
   </div>
 </div>
 
-<div id="front-footer" class="footer">v3.15，作者：git9527</div>
+<div id="front-footer" class="footer">v3.16，作者：git9527</div>
 
 <div id="settingsModal" class="modal">
 
@@ -35,6 +35,7 @@
   var normalOption = DEFAULT_NORMAL_OPTIONS
   var hideNotes = DEFAULT_HIDE_NOTES
   var autoFlip = DEFAULT_AUTO_FLIP
+  var isDelayOptionComing = false
 
   function showFrontOptions(hideOption, randomOption, delayOption) {
     var keySeq = []
@@ -55,11 +56,19 @@
       Persistence.setItem('ANKI-OPTIONS-ORDER', keySeq.toString())
     }
     if (delayOption === '1') {
+      isDelayOptionComing = true
       setTimeout(function () {
         document.getElementById("front-options").innerHTML = liList
+        isDelayOptionComing = false
       }, 1500)
     } else {
-      document.getElementById("front-options").innerHTML = liList
+      if (isDelayOptionComing) {
+        setTimeout(function () {
+          document.getElementById("front-options").innerHTML = liList
+        }, 1500)
+      } else {
+        document.getElementById("front-options").innerHTML = liList
+      }
     }
   }
 
